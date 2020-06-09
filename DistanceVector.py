@@ -60,8 +60,10 @@ def update_table(nodes, routing_table_node, count):
 							and routing_table_node[i][j][k] !=
 							 min_column(old_table[j],k) + nodes[nodes[i]+nodes[j]]):
 
-							routing_table_node[i][j][k] = min_column(old_table[j],k) + nodes[nodes[i]+nodes[j]]#min_column(old_table[i],j)
-							print("t="+str(count)+" distance from "+ nodes[i] +" to "+nodes[k]+" via "+nodes[j]+" is "+str(routing_table_node[i][j][k]))
+							routing_table_node[i][j][k] = min_column(old_table[j],k) + nodes[nodes[i]+nodes[j]]#min_column(old_table[i],j)							
+							if(min_column(old_table[i],j) != min_column(old_table[j],k) + nodes[nodes[i]+nodes[j]]):
+								print("t="+str(count)+" distance from "+ nodes[i] +" to "+nodes[k]+" via "+nodes[j]+" is "+str(routing_table_node[i][j][k]))
+								#print(str(min_column(old_table[i],j)) +"  "+ str(min_column(routing_table_node[i],j)))
 							change = 1
 
 						"""
@@ -114,9 +116,8 @@ def reinitialize_tables(nodes, routing_table_node, links, count):
 
 def changed_configuration(nodes, routing_table_node, changed_config):
 	count = 0
-	reinitialize_tables(nodes, routing_table_node, changed_config, count)
+	routing_table_node, count, nodes = reinitialize_tables(nodes, routing_table_node, changed_config, count)
 
-	count += 1
 	change = 1
 	while(change == 1):
 		#print(routing_table_node)
