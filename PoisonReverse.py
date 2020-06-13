@@ -102,7 +102,6 @@ def changed_configuration(nodes, routing_table_node, changed_config):
 
 
 
-
 configL = open(str(sys.argv[1]), "r")
 configuration = configL.read().split('\n')
 configL.close()
