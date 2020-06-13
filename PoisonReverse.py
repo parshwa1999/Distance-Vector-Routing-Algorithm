@@ -65,6 +65,13 @@ def print_routing_routes(nodes, routing_table_node):
 				print("router "+nodes[i]+": "+nodes[j]+" is "+str(min_column(routing_table_node[i], j))+" routing through "+ nodes[route_through(min_column(routing_table_node[i],j), routing_table_node[i], j, i)])
 		print(" ")
 
+def poison_reverse(nodes, routing_table_node):
+	for i in range(0, len(routing_table_node)):
+		for k in range(0, len(routing_table_node[i][i])):
+			if(routing_table_node[i][i][k] != min_column(routing_table_node[i], k)):
+				routing_table_node[i][i][k] = None
+	return routing_table_node
+
 def reinitialize_tables(nodes, routing_table_node, links, count):
 	for i in range(0,len(routing_table_node)):
 		for j in links:
@@ -141,12 +148,15 @@ change = 1
 while(change == 1):
 	change, routing_table_node = update_table(nodes, routing_table_node, count)
 	count += 1
+print(routing_table_node)
+routing_table_node = poison_reverse(nodes, routing_table_node)
 
 print("\n#Initial \n")
 print_routing_routes(nodes, routing_table_node)
 
 print("\n#UPDATE\n")
 routing_table_node = changed_configuration(nodes, routing_table_node, changed_config[1:len(changed_config)])
+routing_table_node = poison_reverse(nodes, routing_table_node)
 
 print("\n#FINAL\n")
 print_routing_routes(nodes, routing_table_node)
