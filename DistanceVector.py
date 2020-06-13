@@ -1,4 +1,4 @@
-#import copy
+import copy
 import sys
 
 
@@ -49,7 +49,7 @@ def initialize_tables(nodes, routing_table_node, links, count):
 def update_table(nodes, routing_table_node, count):
 	print(" ")
 	change = 0
-	old_table = routing_table_node[:]
+	old_table = copy.deepcopy(routing_table_node)
 	for i in range(0, len(routing_table_node)):
 		for j in range(0, len(routing_table_node[i])):
 			if(routing_table_node[i][i][j] != None): #check neighbour
@@ -60,9 +60,12 @@ def update_table(nodes, routing_table_node, count):
 							and routing_table_node[i][j][k] !=
 							 min_column(old_table[j],k) + nodes[nodes[i]+nodes[j]]):
 
+							#print(routing_table_node)
 							routing_table_node[i][j][k] = min_column(old_table[j],k) + nodes[nodes[i]+nodes[j]]#min_column(old_table[i],j)							
-							if(min_column(old_table[i],j) != min_column(old_table[j],k) + nodes[nodes[i]+nodes[j]]):
+							if(min_column(old_table[i],j) != min_column(old_table[j],k) + nodes[nodes[i]+nodes[j]] and j != k):
 								print("t="+str(count)+" distance from "+ nodes[i] +" to "+nodes[k]+" via "+nodes[j]+" is "+str(routing_table_node[i][j][k]))
+								#print("OLD")
+								#print(routing_table_node)
 								#print(str(min_column(old_table[i],j)) +"  "+ str(min_column(routing_table_node[i],j)))
 							change = 1
 
@@ -119,10 +122,12 @@ def changed_configuration(nodes, routing_table_node, changed_config):
 	routing_table_node, count, nodes = reinitialize_tables(nodes, routing_table_node, changed_config, count)
 
 	change = 1
+	#print("Change:"+str(change)+"   Count:"+str(count))
 	while(change == 1):
 		#print(routing_table_node)
 		change, routing_table_node = update_table(nodes, routing_table_node, count)
 		count += 1
+		#print("-----Change:"+str(change)+"   Count:"+str(count))
 	return routing_table_node
 
 
